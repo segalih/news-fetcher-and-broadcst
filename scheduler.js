@@ -18,7 +18,13 @@ const rssUrls = process.env.RSS_FEED_URLS.split(",");
 // Fungsi utama
 async function processNews() {
   for (const url of rssUrls) {
-    const items = await fetchRSS(url);
+    let feed;
+    try {
+      feed = await fetchRSS(url);
+    } catch (error) {
+      console.log(error);
+    }
+    const { items, title } = feed;
     for (const item of items) {
       // Cek apakah berita sudah diproses
       const existing = await News.findOne({ where: { link: item.link } });
@@ -29,7 +35,11 @@ async function processNews() {
         try {
           const message = `
 🚨 *${item.title}*
+
+
 🔗 [Baca selengkapnya](${item.link})
+
+Sumber: ${title}
 #Crypto #News
 `;
           await broadcastToTelegram(message);
