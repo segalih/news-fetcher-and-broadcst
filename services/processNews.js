@@ -75,7 +75,7 @@ async function processNews() {
           // 🔹 cek dulu di DB
           const existing = await News.findOne({ where: { link: item.link } });
 
-          if (existing?.isSent || existing?.isRelevant) {
+          if (existing?.isSent ) {
             continue;
           }
 

@@ -5,6 +5,7 @@ async function broadcastToTelegram(message) {
   for (const chatId of chatIds) {
     try {
       await bot.telegram.sendMessage(chatId, message, {
+        message_thread_id: 8,
         parse_mode: "Markdown",
       });
     } catch (err) {
